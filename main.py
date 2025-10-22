@@ -1,88 +1,137 @@
 import os
-import warnings
-import torch.optim as optim
+import torch
 from torch import nn
-from config import set_seed, device, seed, num_epochs_phase1, num_epochs_phase2
-from config import learning_rate_phase1, learning_rate_phase2
-from data_loader import load_datasets
-from model import initialize_model
-from train import train_model
-from test import test_model
-from utils import plot_training_metrics, print_device_info
+from torchvision import models
+from torchvision.models import ResNet18_Weights
+from PIL import Image
+import io
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from pydantic import BaseModel
+from torchvision import transforms
 
-# 忽略警告
-warnings.filterwarnings('ignore')
+# 解决OpenMP冲突
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-if __name__ == '__main__':
-    # 设置随机种子
-    set_seed(seed)
+# 初始化FastAPI应用
+app = FastAPI(title="CIFAR-10图像分类API", description="基于ResNet18的CIFAR-10图像分类服务")
 
-    # 打印设备信息
-    print_device_info()
+# 设备配置
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+print(f'运行设备: {device}')
 
-    # 1. 加载数据集
-    print("Loading datasets...")
-    dataloaders, dataset_sizes, class_names = load_datasets()
-    print(f"Classes: {class_names}")
+# 数据预处理（与训练时保持一致）
+data_transforms = {
+    'test': transforms.Compose([
+        transforms.Resize((32, 32)),  # 调整为模型输入尺寸
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+    ])
+}
 
-    # 2. 初始化模型（ResNet18 + 冻结预训练层）
-    print("Initializing model...")
-    model = initialize_model(
-        model_name='resnet18',
-        num_classes=len(class_names),
-        feature_extract=True
-    )
+# 配置参数
+weight_path = 'cifar10_best.pt'
+class_names = ['飞机', '汽车', '鸟', '猫', '鹿', '狗', '青蛙', '马', '船', '卡车']
 
-    # 定义损失函数
-    criterion = nn.CrossEntropyLoss()
 
-    # 3. 第一阶段训练：冻结预训练层，训练分类头
-    print("\nPhase 1: 冻结预训练层，训练分类头")
-    optimizer_phase1 = optim.Adam(
-        filter(lambda p: p.requires_grad, model.parameters()),  # 仅训练可更新参数
-        lr=learning_rate_phase1
-    )
-    scheduler_phase1 = optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_phase1, mode='min', factor=0.5, patience=3
-    )
+# 初始化模型并加载权重（只在服务启动时执行一次）
+def initialize_model(num_classes):
+    try:
+        model = models.resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 
-    model, val_acc_phase1, train_acc_phase1, val_loss_phase1, train_loss_phase1 = train_model(
-        model, dataloaders, dataset_sizes, criterion,
-        optimizer_phase1, scheduler_phase1, num_epochs=num_epochs_phase1
-    )
+        # 冻结参数
+        for param in model.parameters():
+            param.requires_grad = False
 
-    # 4. 第二阶段训练：解冻所有层，微调整个网络
-    print("\nPhase 2: 解冻所有层，微调整个网络")
-    for param in model.parameters():
-        param.requires_grad = True  # 解冻所有层
+        # 替换分类头
+        num_ftrs = model.fc.in_features
+        model.fc = nn.Sequential(
+            nn.Dropout(0.5),
+            nn.Linear(num_ftrs, num_classes)
+        )
 
-    optimizer_phase2 = optim.Adam(
-        model.parameters(),
-        lr=learning_rate_phase2  # 降低学习率
-    )
-    scheduler_phase2 = optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_phase2, mode='min', factor=0.5, patience=3
-    )
+        return model.to(device)
+    except Exception as e:
+        print(f"模型初始化失败: {e}")
+        raise
 
-    # 继续训练
-    model, val_acc_phase2, train_acc_phase2, val_loss_phase2, train_loss_phase2 = train_model(
-        model, dataloaders, dataset_sizes, criterion,
-        optimizer_phase2, scheduler_phase2, num_epochs=num_epochs_phase2
-    )
 
-    # 合并训练曲线
-    val_acc_history = val_acc_phase1 + val_acc_phase2
-    train_acc_history = train_acc_phase1 + train_acc_phase2
-    valid_losses = val_loss_phase1 + val_loss_phase2
-    train_losses = train_loss_phase1 + train_loss_phase2
+# 加载模型
+try:
+    print("初始化模型...")
+    model = initialize_model(len(class_names))
 
-    # 5. 测试集评估
-    print("\nEvaluating on test set...")
-    test_loss, test_acc = test_model(model, dataloaders, dataset_sizes, class_names, criterion)
+    if os.path.exists(weight_path):
+        print(f"加载模型权重: {weight_path}")
+        checkpoint = torch.load(weight_path, map_location=device)
+        model.load_state_dict(checkpoint['state_dict'])
+        model.eval()  # 设置为评估模式
+        print("模型加载成功!")
+    else:
+        raise Exception(f"权重文件不存在: {weight_path}")
+except Exception as e:
+    print(f"模型加载失败: {e}")
+    raise
 
-    # 6. 可视化训练曲线
-    print("\nPlotting training metrics...")
-    plot_training_metrics(val_acc_history, train_acc_history, valid_losses, train_losses)
 
-    print("\nAll tasks completed!")
+# 定义响应模型
+class PredictionResult(BaseModel):
+    predicted_class: str
+    confidence: float
+    message: str
+
+
+# 根路径
+@app.get("/")
+def read_root():
+    return {
+        "message": "CIFAR-10图像分类API服务已启动",
+        "支持类别": class_names,
+        "使用方法": "发送POST请求到/predict接口，上传图片文件"
+    }
+
+
+# 预测接口
+@app.post("/predict", response_model=PredictionResult)
+async def predict_image(file: UploadFile = File(...)):
+    """接收上传的图片文件，返回分类预测结果"""
+    try:
+        # 验证文件类型
+        if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+            raise HTTPException(status_code=400, detail="请上传图片文件（支持png, jpg, jpeg, bmp, gif格式）")
+
+        # 读取图片内容
+        contents = await file.read()
+        image = Image.open(io.BytesIO(contents)).convert('RGB')
+
+        # 预处理
+        transformed_image = data_transforms['test'](image)
+        image_tensor = transformed_image.unsqueeze(0).to(device)
+
+        # 模型预测
+        with torch.no_grad():
+            outputs = model(image_tensor)
+            probs = torch.softmax(outputs, dim=1)
+            conf, preds = torch.max(probs, 1)
+
+        # 整理结果
+        pred_class = class_names[preds.item()]
+        confidence = float(conf.item() * 100)
+
+        return {
+            "predicted_class": pred_class,
+            "confidence": round(confidence, 2),
+            "message": "预测成功"
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"预测过程出错: {str(e)}")
+
+
+# 健康检查接口
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "device": str(device),
+        "model_loaded": True
+    }
