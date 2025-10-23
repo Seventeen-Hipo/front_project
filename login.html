@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="wideh=device-width,initial-scale=1.0">
+    <title>登录页面</title>
+    <!-- 引入CSS样式文件 -->
+    <link rel="stylesheet" href="style_login.css">
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2 class="login-title">账号登录</h2>
+        <form>
+            <!-- 用户名输入框 -->
+            <div class="form-group">
+                <i class="icon fa-solid fa-user"></i>
+                <input type="text" placeholder="请输入用户名" required>
+            </div>
+            <!-- 密码输入框 -->
+            <div class="form-group">
+                <i class="icon fa-solid fa-lock"></i>
+                <input type="password" placeholder="请输入密码" required>
+            </div>
+            <!-- 选项组 -->
+             <div class="option-group">
+                <label class="remember-me">
+                    <input type="checkbox">记住我
+                </label>
+                <a href="#" class="forgot-password">忘记密码</a>
+             </div>
+            <!-- 登录按钮 -->
+            <button type="submit" class="login-btn">登录</button>
+            <!-- 注册链接 -->
+             <div class="register-link">
+                还没有账号？<a href="#">立即注册</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

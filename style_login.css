@@ -1,0 +1,127 @@
+/* 全局样式重置 */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial','Microsoft YaHei',sans-serif;
+}
+/* 背景样式 */
+body {
+    background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* 登录容器 */
+.login-container{
+    background-color: #fff;
+    width: 380px;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+/* hover上浮效果 */
+.login-container:hover{
+    transform: translateY(-5px);
+}
+/* 标题样式 */
+.login-title{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+/* 表单组样式 */
+.form-group{
+    margin-bottom: 25px;
+    position: relative;
+}
+/* 输入框样式 */
+.form-group input{
+    width: 100%;
+    height: 50px;
+    padding: 0 15px 0 45px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3 ease;
+}
+.form-group input:focus{
+    outline: none;
+    /* 聚焦时边框变色 */
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+/* 图标样式 */
+.form-group .icon{
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+}
+/* 记住密码与忘记密码 */
+.option-group{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+.remember-me{
+    display: flex;
+    align-items: center;
+    color: #666;
+}
+.remember-me input{
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    /* 复选框选中颜色 */
+    accent-color: #667eea;
+}
+.forgot-password{
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3 ease;
+}
+.forgot-password:hover{
+    color: #764ba2;
+}
+/* 登录按钮 */
+.login-btn{
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.3 ease;
+}
+.login-btn:hover{
+    /* 透明度设置 */
+    opacity: 0.9;
+}
+/* 注册链接 */
+.register-link{
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #666;
+}
+.register-link a{
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3 ease;
+}
+.register-link a:hover{
+    color: #764ba2;
+}
