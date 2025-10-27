@@ -1,17 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>主页面</title>
-    <!-- 引入外部CSS文件 -->
-    <link rel="stylesheet" href="home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动物科普网 - 探索自然生命的奥秘</title>
+    <!-- 引入CSS样式文件 -->
+    <link rel="stylesheet" href="home_style.css">
 </head>
 <body>
-    <div class="home-container">
-        <h2 class="home-title">登录成功！</h2>
-        <p class="home-desc">欢迎访问系统主页面</p >
-        <a href="http://127.0.0.1:5500/login.html" class="back-btn">返回登录页</a >
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <!-- <img src="https://picsum.photos/id/1062/40/40" alt="动物科普网logo"> -->
+                <span>动物科普网</span>
+            </div>
+            <ul class="nav-list" id="navList">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">陆地动物</a></li>
+                <li><a href="#">海洋动物</a></li>
+                <li><a href="#">鸟类世界</a></li>
+                <li><a href="#">珍稀保护</a></li>
+                <li><a href="#">科普资讯</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                ☰
+            </div>
+        </div>
+    </header>
+
+    <!-- 焦点图区域 -->
+    <!-- <div class="banner">
+        <div class="banner-slides" id="bannerSlides">
+            <div class="banner-slide slide1"></div>
+            <div class="banner-slide slide2"></div>
+            <div class="banner-slide slide3"></div>
+        </div>
+        <div class="banner-dots" id="bannerDots">
+            <div class="banner-dot active" data-index="0"></div>
+            <div class="banner-dot" data-index="1"></div>
+            <div class="banner-dot" data-index="2"></div>
+        </div>
+    </div> -->
+    <div class="slider-container">
+    <!-- 轮播图容器 -->
+    <div class="slider-wrapper">
+        <div class="slider-item" style="background: url(picture/zoo.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p1.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p2.jpg) center/cover no-repeat;"></div>
     </div>
+    <!-- 分页器 -->
+    <div class="pagination"></div>
+    <!-- 左右导航按钮 -->
+    <button class="prev-btn">&lt;</button>
+    <button class="next-btn">&gt;</button>
+    </div>
+
+    <!-- 主体内容 -->
+    <div class="container">
+        <!-- 科普分类 -->
+        <section>
+            <h2 class="section-title">科普分类</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon">🦁</div>
+                    <h3 class="category-name">陆地哺乳动物</h3>
+                    <p class="category-desc">探索狮子、老虎、大象等陆地哺乳动物的生活习性与生存智慧</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🐠</div>
+                    <h3 class="category-name">海洋生物</h3>
+                    <p class="category-desc">揭秘鲸鱼、鲨鱼、珊瑚等海洋生物的神秘世界与生态环境</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🦅</div>
+                    <h3 class="category-name">鸟类王国</h3>
+                    <p class="category-desc">了解雄鹰、孔雀、企鹅等鸟类的飞行能力与繁殖特点</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🐢</div>
+                    <h3 class="category-name">爬行动物</h3>
+                    <p class="category-desc">认识鳄鱼、蛇、乌龟等爬行动物的独特生理结构与生存方式</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 热门动物介绍 -->
+        <section>
+            <h2 class="section-title">热门动物科普</h2>
+            <div class="animal-list">
+                <div class="animal-card">
+                    <img src="picture/dog.webp" alt="狗狗" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">犬类：人类最忠实的朋友</h3>
+                        <p class="animal-desc">犬类是最早被人类驯化的动物之一，距今已有上万年历史。它们具有敏锐的嗅觉和听觉，能通过肢体语言表达情绪，目前全球已培育出超过300个不同品种。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+                <div class="animal-card">
+                    <img src="picture/lu.jpg" alt="梅花鹿" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">梅花鹿：森林中的精灵</h3>
+                        <p class="animal-desc">梅花鹿是中国国家二级保护动物，夏季毛色呈栗红色并带有白色斑点，冬季则变为烟褐色。它们主要以植物为食，擅长奔跑，听觉和嗅觉十分灵敏。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+                <div class="animal-card">
+                    <img src="picture/yinwu.jpg" alt="鹦鹉" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">鹦鹉：会说话的鸟类智者</h3>
+                        <p class="animal-desc">鹦鹉拥有独特的鸣管结构，能模仿人类语言和其他声音。它们主要分布在热带和亚热带地区，以果实、种子和花蜜为食，部分品种寿命可达80年以上。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>快速导航</h3>
+                <ul>
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">陆地动物</a></li>
+                    <li><a href="#">海洋动物</a></li>
+                    <li><a href="#">鸟类世界</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>资源中心</h3>
+                <ul>
+                    <li><a href="#">科普视频</a></li>
+                    <li><a href="#">动物图鉴</a></li>
+                    <li><a href="#">保护项目</a></li>
+                    <li><a href="#">教育资料</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>联系我们</h3>
+                <ul>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">合作洽谈</a></li>
+                    <li><a href="#">意见反馈</a></li>
+                    <li><a href="#">加入我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>关注我们</h3>
+                <ul>
+                    <li><a href="#">微信公众号</a></li>
+                    <li><a href="#">微博</a></li>
+                    <li><a href="#">抖音</a></li>
+                    <li><a href="#">B站</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 动物科普网 版权所有 | 京ICP备12345678号
+        </div>
+    </footer>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="home_interaction.js"></script>
 </body>
 </html>
