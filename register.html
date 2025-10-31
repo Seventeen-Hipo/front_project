@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <!-- 引入外部CSS（路径对应static/css/style.css） -->
+    <link rel="stylesheet" href="register_style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>用户注册</h2>
+        <!-- 表单提交到Python后端的 /register 路由 -->
+        <form action="/register" method="post" onsubmit="return validateForm()">
+            <!-- 用户名输入项 -->
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" placeholder="3-15位字符，可含字母/数字" required>
+                <div class="error-tip" id="userError">用户名需3-15位字符</div>
+            </div>
+
+            <!-- 密码输入项 -->
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="6-20位字符，建议含字母和数字" required>
+                <div class="error-tip" id="pwdError">密码需6-20位字符</div>
+            </div>
+
+            <!-- 邮箱输入项 -->
+            <div class="form-group">
+                <label for="email">邮箱</label>
+                <input type="email" id="email" name="email" placeholder="用于登录和找回密码" required>
+                <div class="error-tip" id="emailError">请输入正确的邮箱格式（如xxx@xxx.com）</div>
+            </div>
+
+            <!-- 注册按钮 -->
+            <button type="submit" class="register-btn">注册</button>
+        </form>
+    </div>
+
+    <!-- 前端表单验证（可选，减少无效请求） -->
+    <script>
+        function validateForm() {
+            let isValid = true;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const emailReg = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/; // 邮箱格式正则
+
+            // 验证用户名
+            if (username.length < 3 || username.length > 15) {
+                document.getElementById('userError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('userError').style.display = 'none';
+            }
+
+            // 验证密码
+            if (password.length < 6 || password.length > 20) {
+                document.getElementById('pwdError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('pwdError').style.display = 'none';
+            }
+
+            // 验证邮箱
+            if (!emailReg.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').style.display = 'none';
+            }
+
+            return isValid; // 验证通过才提交表单
+        }
+    </script>
+</body>
+</html>

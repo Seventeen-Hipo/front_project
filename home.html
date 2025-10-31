@@ -12,7 +12,6 @@
     <header class="header">
         <div class="nav-container">
             <div class="logo">
-                <!-- <img src="https://picsum.photos/id/1062/40/40" alt="动物科普网logo"> -->
                 <span>动物科普网</span>
             </div>
             <ul class="nav-list" id="navList">
@@ -29,26 +28,17 @@
             </div>
         </div>
     </header>
-
-    <!-- 焦点图区域 -->
-    <!-- <div class="banner">
-        <div class="banner-slides" id="bannerSlides">
-            <div class="banner-slide slide1"></div>
-            <div class="banner-slide slide2"></div>
-            <div class="banner-slide slide3"></div>
-        </div>
-        <div class="banner-dots" id="bannerDots">
-            <div class="banner-dot active" data-index="0"></div>
-            <div class="banner-dot" data-index="1"></div>
-            <div class="banner-dot" data-index="2"></div>
-        </div>
-    </div> -->
     <div class="slider-container">
     <!-- 轮播图容器 -->
     <div class="slider-wrapper">
-        <div class="slider-item" style="background: url(picture/zoo.jpg) center/cover no-repeat;"></div>
         <div class="slider-item" style="background: url(picture/p1.jpg) center/cover no-repeat;"></div>
-        <div class="slider-item" style="background: url(picture/p2.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p2.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p3.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p4.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p5.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p6.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p7.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(picture/p8.jpeg) center/cover no-repeat;"></div>
     </div>
     <!-- 分页器 -->
     <div class="pagination"></div>
@@ -57,8 +47,45 @@
     <button class="next-btn">&gt;</button>
     </div>
 
+    <!-- 轮播与正文之间的自适应留白，防止导航栏遮挡标题 -->
+    <div class="after-hero-spacer"></div>
+
     <!-- 主体内容 -->
     <div class="container">
+        <!-- 动物新闻专栏 -->
+        <section class="news-section">
+            <h2 class="section-title">动物新闻</h2>
+            <div class="news-marquee" id="newsMarquee">
+                <div class="news-track">
+                    <a class="news-item" href="https://news.qq.com/rain/a/20251031V02YBG00">
+                        <span class="tag">热点</span>
+                        <span class="title">深山走红动物园喊网友别打钱了“有能力把动物照顾好”</span>
+                        <span class="time">2025-10-31</span>
+                    </a>
+                    <a class="news-item" href="https://news.qq.com/rain/a/20251030V02E7B00">
+                        <span class="tag">热点</span>
+                        <span class="title">一言不合就开打！大自然攻击性最强的动物之一</span>
+                        <span class="time">2025-10-31</span>
+                    </a>
+                    <a class="news-item" href="https://news.qq.com/rain/a/20251031A036FD00">
+                        <span class="tag">生态</span>
+                        <span class="title">长江保护连续五年“优秀”！咸宁生态再传捷报</span>
+                        <span class="time">2025-10-31</span>
+                    </a>
+                    <a class="news-item" href="https://news.qq.com/rain/a/20251030A05B3A00">
+                        <span class="tag">科普</span>
+                        <span class="title">《自然》：护好DNA，长寿无癌的关键！</span>
+                        <span class="time">2025-10-31</span>
+                    </a>
+                    <a class="news-item" href="https://news.qq.com/rain/a/20251031A01F8O00">
+                        <span class="tag">科普</span>
+                        <span class="title">猪体重那么大，为什么游泳不下沉？</span>
+                        <span class="time">2025-10-31</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- 科普分类 -->
         <section>
             <h2 class="section-title">科普分类</h2>

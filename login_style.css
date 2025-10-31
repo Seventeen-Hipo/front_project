@@ -125,3 +125,13 @@ body {
 .register-link a:hover{
     color: #764ba2;
 }
+.error{
+     color: #ff4d4f;
+     text-align: center;
+     margin-bottom: 20px;
+     font-size: 14px;
+}
+
+.login-container .err p{
+    display: none;
+}
