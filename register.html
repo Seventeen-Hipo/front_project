@@ -3,76 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户注册</title>
+    <title>用户注册 - 动物科普网</title>
     <!-- 引入外部CSS（路径对应static/css/style.css） -->
     <link rel="stylesheet" href="register_style.css">
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="form-container">
-        <h2>用户注册</h2>
-        <!-- 表单提交到Python后端的 /register 路由 -->
-        <form action="/register" method="post" onsubmit="return validateForm()">
-            <!-- 用户名输入项 -->
-            <div class="form-group">
-                <label for="username">用户名</label>
-                <input type="text" id="username" name="username" placeholder="3-15位字符，可含字母/数字" required>
-                <div class="error-tip" id="userError">用户名需3-15位字符</div>
+    <div class="register-wrapper">
+        <a href="/home" class="back-home">← 返回首页</a>
+        <div class="form-container">
+            <div class="register-header">
+                <div class="register-icon">📝</div>
+                <h2>用户注册</h2>
+                <p class="register-subtitle">加入我们，开启探索之旅</p>
             </div>
-
-            <!-- 密码输入项 -->
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" name="password" placeholder="6-20位字符，建议含字母和数字" required>
-                <div class="error-tip" id="pwdError">密码需6-20位字符</div>
+            <!-- 错误提示 -->
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <p id="errorText"></p>
             </div>
+            
+            <!-- 表单提交到Python后端的 /register 路由 -->
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <!-- 用户名输入项 -->
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fa-solid fa-user"></i>
+                        <span>用户名</span>
+                    </label>
+                    <input type="text" id="username" name="username" placeholder="3-15位字符，可含字母/数字" required>
+                    <div class="error-tip" id="userError">用户名需3-15位字符</div>
+                </div>
 
-            <!-- 邮箱输入项 -->
-            <div class="form-group">
-                <label for="email">邮箱</label>
-                <input type="email" id="email" name="email" placeholder="用于登录和找回密码" required>
-                <div class="error-tip" id="emailError">请输入正确的邮箱格式（如xxx@xxx.com）</div>
-            </div>
+                <!-- 密码输入项 -->
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>密码</span>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="6-20位字符，建议含字母和数字" required>
+                    <div class="error-tip" id="pwdError">密码需6-20位字符</div>
+                </div>
 
-            <!-- 注册按钮 -->
-            <button type="submit" class="register-btn">注册</button>
-        </form>
+                <!-- 邮箱输入项 -->
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>邮箱</span>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="用于登录和找回密码" required>
+                    <div class="error-tip" id="emailError">请输入正确的邮箱格式（如xxx@xxx.com）</div>
+                </div>
+
+                <!-- 注册按钮 -->
+                <button type="submit" class="register-btn">立即注册</button>
+                
+                <!-- 登录链接 -->
+                <div class="login-link">
+                    已有账号？<a href="/login">立即登录</a>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- 前端表单验证（可选，减少无效请求） -->
+    <!-- 前端表单验证和AJAX提交 -->
     <script>
+        // 检查URL参数中的错误信息
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const success = urlParams.get('success');
+        
+        if (error) {
+            showError(error);
+        } else if (success) {
+            showSuccess(success);
+        }
+
+        // 前端表单验证
         function validateForm() {
             let isValid = true;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const email = document.getElementById('email').value;
-            const emailReg = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/; // 邮箱格式正则
+            const emailReg = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+            // 清除之前的错误
+            document.querySelectorAll('.error-tip').forEach(el => {
+                el.style.display = 'none';
+            });
+            hideError();
 
             // 验证用户名
-            if (username.length < 3 || username.length > 15) {
+            if (!username || username.length < 3 || username.length > 15) {
                 document.getElementById('userError').style.display = 'block';
                 isValid = false;
-            } else {
-                document.getElementById('userError').style.display = 'none';
             }
 
             // 验证密码
-            if (password.length < 6 || password.length > 20) {
+            if (!password || password.length < 6 || password.length > 20) {
                 document.getElementById('pwdError').style.display = 'block';
                 isValid = false;
-            } else {
-                document.getElementById('pwdError').style.display = 'none';
             }
 
             // 验证邮箱
-            if (!emailReg.test(email)) {
+            if (!email || !emailReg.test(email)) {
                 document.getElementById('emailError').style.display = 'block';
                 isValid = false;
-            } else {
-                document.getElementById('emailError').style.display = 'none';
             }
 
-            return isValid; // 验证通过才提交表单
+            return isValid;
         }
+
+        // 显示错误信息
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.opacity = '1';
+            }, 10);
+        }
+
+        // 显示成功信息
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorDiv.style.background = 'rgba(81, 207, 102, 0.1)';
+            errorDiv.style.borderColor = 'rgba(81, 207, 102, 0.2)';
+            errorText.style.color = '#51cf66';
+            errorText.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.opacity = '1';
+            }, 10);
+        }
+
+        // 隐藏错误信息
+        function hideError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.opacity = '0';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+                errorDiv.style.background = 'rgba(255, 77, 79, 0.1)';
+                errorDiv.style.borderColor = 'rgba(255, 77, 79, 0.2)';
+                const errorText = document.getElementById('errorText');
+                errorText.style.color = '#ff4d4f';
+            }, 300);
+        }
+
+        // 处理注册提交
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            // 前端验证
+            if (!validateForm()) {
+                showError('请检查输入信息');
+                return false;
+            }
+            
+            const form = document.getElementById('registerForm');
+            const formData = new FormData(form);
+            const registerBtn = document.querySelector('.register-btn');
+            const originalText = registerBtn.textContent;
+            
+            // 隐藏之前的错误
+            hideError();
+            
+            // 按钮加载状态
+            registerBtn.disabled = true;
+            registerBtn.textContent = '注册中...';
+            registerBtn.style.opacity = '0.7';
+            
+            try {
+                // 发送AJAX请求
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // 注册成功
+                    registerBtn.textContent = '注册成功！';
+                    registerBtn.style.background = 'linear-gradient(135deg, #51cf66 0%, #69db7c 100%)';
+                    showSuccess(data.message || '注册成功，正在跳转...');
+                    
+                    // 延迟跳转到登录页
+                    setTimeout(() => {
+                        window.location.href = '/login?success=注册成功，请登录';
+                    }, 1000);
+                } else {
+                    // 注册失败，显示错误
+                    showError(data.message || '注册失败，请重试');
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = originalText;
+                    registerBtn.style.opacity = '1';
+                }
+            } catch (error) {
+                console.error('注册错误:', error);
+                showError('网络错误，请稍后重试');
+                registerBtn.disabled = false;
+                registerBtn.textContent = originalText;
+                registerBtn.style.opacity = '1';
+            }
+            
+            return false;
+        }
+
+        // 输入框焦点时隐藏错误
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                const errorTip = this.parentElement.querySelector('.error-tip');
+                if (errorTip) {
+                    errorTip.style.display = 'none';
+                }
+                hideError();
+            });
+        });
     </script>
 </body>
 </html>

@@ -1,3 +1,47 @@
+// 全屏section滚动触发动画系统
+(function initFullscreenSectionAnimations() {
+  const sections = document.querySelectorAll('.fullscreen-section');
+  if (!sections.length) return;
+
+  // 为每个section创建IntersectionObserver
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -20% 0px', // 提前20%触发进入动画
+    threshold: [0, 0.2, 0.5, 0.8, 1]
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const section = entry.target;
+      const ratio = entry.intersectionRatio;
+
+      if (ratio > 0.3) {
+        // 进入视口：添加active和visible类
+        section.classList.add('active', 'visible');
+        section.classList.remove('exit');
+      } else if (ratio < 0.1) {
+        // 退出视口：添加exit类，移除active
+        section.classList.add('exit');
+        section.classList.remove('active');
+        // 向上滚动时也移除visible以便重新触发
+        if (entry.boundingClientRect.top < 0) {
+          section.classList.remove('visible');
+        }
+      }
+
+      // 根据进入程度动态调整视差和透明度
+      if (ratio > 0) {
+        const progress = Math.min(1, ratio / 0.8);
+        section.style.setProperty('--scroll-progress', progress);
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
+})();
+
 // 科普分类：滚动到视口时逐个显现，并在悬停时有细致动画（见 CSS）
 (function initCategoryRevealOnScroll() {
   const grid = document.querySelector('.category-grid');
@@ -269,29 +313,16 @@ updateHeaderState();
 initEventListeners();
 enableFullscreenExit();
 
-// 动物新闻专栏：克隆内容以实现无缝滚动
-(function initNewsMarquee() {
-  const marquee = document.getElementById('newsMarquee');
-  if (!marquee) return;
-  const track = marquee.querySelector('.news-track');
-  if (!track) return;
-  // 若子元素不足以铺满两屏，克隆一次以保证 -50% 平移时无缝
-  const items = Array.from(track.children);
-  const clone = document.createDocumentFragment();
-  items.forEach((el) => clone.appendChild(el.cloneNode(true)));
-  track.appendChild(clone);
-
-  // 触摸滑动：滑动时暂时暂停动画，提升可控性
-  let touchStartX = 0;
-  marquee.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-    track.style.animationPlayState = 'paused';
-  }, { passive: true });
-  marquee.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    // 根据滑动方向，瞬时偏移一点点，营造跟手感（随后动画继续）
-    const current = getComputedStyle(track).transform;
-    // 简化处理：不解析矩阵，恢复动画即可
-    track.style.animationPlayState = 'running';
-  }, { passive: true });
+// 动物新闻卡片：添加交互效果
+(function initNewsCards() {
+  const cards = document.querySelectorAll('.news-card');
+  cards.forEach((card) => {
+    // 为卡片添加微妙的悬浮效果
+    card.addEventListener('mouseenter', () => {
+      card.style.transform = 'translateY(-8px) scale(1.02)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(0) scale(1)';
+    });
+  });
 })();

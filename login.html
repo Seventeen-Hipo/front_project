@@ -1,43 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="wideh=device-width,initial-scale=1.0">
-    <title>登录页面</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>登录页面 - 动物科普网</title>
     <!-- 引入CSS样式文件 -->
-    <link rel="stylesheet" href="style_login.css">
+    <link rel="stylesheet" href="login_style.css">
     <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="login-container">
-        <h2 class="login-title">账号登录</h2>
-        <form>
-            <!-- 用户名输入框 -->
-            <div class="form-group">
-                <i class="icon fa-solid fa-user"></i>
-                <input type="text" placeholder="请输入用户名" required>
+    <div class="login-wrapper">
+        <a href="/home" class="back-home">← 返回首页</a>
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-icon">🔐</div>
+                <h2 class="login-title">账号登录</h2>
+                <p class="login-subtitle">欢迎回来，探索动物世界的奥秘</p>
             </div>
-            <!-- 密码输入框 -->
-            <div class="form-group">
-                <i class="icon fa-solid fa-lock"></i>
-                <input type="password" placeholder="请输入密码" required>
+            <div class="err" id="errorMessage">
+                <p id="errorText"></p>
             </div>
-            <!-- 选项组 -->
-             <div class="option-group">
-                <label class="remember-me">
-                    <input type="checkbox">记住我
-                </label>
-                <a href="#" class="forgot-password">忘记密码</a>
-             </div>
-            <!-- 登录按钮 -->
-            <button type="submit" class="login-btn">登录</button>
-            <!-- 注册链接 -->
-             <div class="register-link">
-                还没有账号？<a href="#">立即注册</a>
-            </div>
-        </form>
+            <!-- 关键修改：表单使用AJAX提交，避免页面刷新 -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <!-- 用户名输入框：新增name="username"，用于后端接收数据 -->
+                <div class="form-group">
+                    <i class="icon fa-solid fa-user"></i>
+                    <input type="text" name="username" placeholder="请输入用户名" required>
+                </div>
+                <!-- 密码输入框：新增name="password"，用于后端接收数据 -->
+                <div class="form-group">
+                    <i class="icon fa-solid fa-lock"></i>
+                    <input type="password" name="password" placeholder="请输入密码" required>
+                </div>
+                <!-- 选项组 -->
+                <div class="option-group">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">记住我
+                    </label>
+                    <a href="#" class="forgot-password">忘记密码</a>
+                </div>
+                <!-- 登录按钮 -->
+                <button type="submit" class="login-btn">登录</button>
+                <!-- 注册链接 -->
+                <div class="register-link">
+                    还没有账号？<a href="/register">立即注册</a>
+                </div>
+            </form>
+        </div>
     </div>
+    <script>
+        // 检查URL参数中的错误信息
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            showError(error);
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.opacity = '1';
+            }, 10);
+        }
+
+        // 隐藏错误信息
+        function hideError() {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.opacity = '0';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 300);
+        }
+
+        // 处理登录提交
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+            const loginBtn = document.querySelector('.login-btn');
+            const originalText = loginBtn.textContent;
+            
+            // 隐藏之前的错误
+            hideError();
+            
+            // 按钮加载状态
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登录中...';
+            loginBtn.style.opacity = '0.7';
+            
+            try {
+                // 发送AJAX请求
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // 登录成功
+                    loginBtn.textContent = '登录成功！';
+                    loginBtn.style.background = 'linear-gradient(135deg, #51cf66 0%, #69db7c 100%)';
+                    
+                    // 延迟跳转，显示成功状态
+                    setTimeout(() => {
+                        window.location.href = '/home';
+                    }, 800);
+                } else {
+                    // 登录失败，显示错误
+                    showError(data.message || '登录失败，请检查用户名和密码');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = originalText;
+                    loginBtn.style.opacity = '1';
+                }
+            } catch (error) {
+                console.error('登录错误:', error);
+                showError('网络错误，请稍后重试');
+                loginBtn.disabled = false;
+                loginBtn.textContent = originalText;
+                loginBtn.style.opacity = '1';
+            }
+        }
+
+        // 输入框焦点时隐藏错误
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', hideError);
+        });
+    </script>
 </body>
 </html>
