@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="register-wrapper">
-        <a href="/home" class="back-home">← 返回首页</a>
+        <a href="home.html" class="back-home">← 返回首页</a>
         <div class="form-container">
             <div class="register-header">
                 <div class="register-icon">📝</div>
@@ -45,22 +45,14 @@
                     <div class="error-tip" id="pwdError">密码需6-20位字符</div>
                 </div>
 
-                <!-- 邮箱输入项 -->
-                <div class="form-group">
-                    <label for="email">
-                        <i class="fa-solid fa-envelope"></i>
-                        <span>邮箱</span>
-                    </label>
-                    <input type="email" id="email" name="email" placeholder="用于登录和找回密码" required>
-                    <div class="error-tip" id="emailError">请输入正确的邮箱格式（如xxx@xxx.com）</div>
-                </div>
+                
 
                 <!-- 注册按钮 -->
                 <button type="submit" class="register-btn">立即注册</button>
                 
                 <!-- 登录链接 -->
                 <div class="login-link">
-                    已有账号？<a href="/login">立即登录</a>
+                    已有账号？<a href="login.html">立即登录</a>
                 </div>
             </form>
         </div>
@@ -84,8 +76,6 @@
             let isValid = true;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const email = document.getElementById('email').value;
-            const emailReg = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
             // 清除之前的错误
             document.querySelectorAll('.error-tip').forEach(el => {
@@ -102,12 +92,6 @@
             // 验证密码
             if (!password || password.length < 6 || password.length > 20) {
                 document.getElementById('pwdError').style.display = 'block';
-                isValid = false;
-            }
-
-            // 验证邮箱
-            if (!email || !emailReg.test(email)) {
-                document.getElementById('emailError').style.display = 'block';
                 isValid = false;
             }
 

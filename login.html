@@ -8,19 +8,41 @@
     <link rel="stylesheet" href="login_style.css">
     <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 错误提示位于登录标题副标题下方，居中展示 */
+        .login-header { position: relative; }
+        #errorMessage{
+            position: relative;
+            display: none;
+            opacity: 0;
+            margin: 10px auto 0 auto;
+            width: 100%;
+            max-width: 80%;
+            text-align: center;
+            background: rgba(255,77,79,0.10);
+            border: 1px solid rgba(255,77,79,0.25);
+            color: #ff4d4f;
+            padding: 10px 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: opacity .2s ease;
+        }
+        #errorMessage.show{ opacity: 1; }
+        #errorMessage p{ margin: 0; }
+    </style>
 </head>
 
 <body>
     <div class="login-wrapper">
-        <a href="/home" class="back-home">← 返回首页</a>
+        <a href="home.html" class="back-home">← 返回首页</a>
         <div class="login-container">
             <div class="login-header">
                 <div class="login-icon">🔐</div>
                 <h2 class="login-title">账号登录</h2>
                 <p class="login-subtitle">欢迎回来，探索动物世界的奥秘</p>
-            </div>
-            <div class="err" id="errorMessage">
-                <p id="errorText"></p>
+                <div class="err" id="errorMessage">
+                    <p id="errorText"></p>
+                </div>
             </div>
             <!-- 关键修改：表单使用AJAX提交，避免页面刷新 -->
             <form id="loginForm" onsubmit="handleLogin(event)">
@@ -45,7 +67,7 @@
                 <button type="submit" class="login-btn">登录</button>
                 <!-- 注册链接 -->
                 <div class="register-link">
-                    还没有账号？<a href="/register">立即注册</a>
+                    还没有账号？<a href="register.html">立即注册</a>
                 </div>
             </form>
         </div>
@@ -58,7 +80,7 @@
             showError(error);
         }
 
-        // 显示错误信息
+        // 显示错误信息（不自动消失，直到用户操作）
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
@@ -66,6 +88,7 @@
             errorDiv.style.display = 'block';
             setTimeout(() => {
                 errorDiv.style.opacity = '1';
+                errorDiv.classList.add('show');
             }, 10);
         }
 
@@ -86,9 +109,6 @@
             const formData = new FormData(form);
             const loginBtn = document.querySelector('.login-btn');
             const originalText = loginBtn.textContent;
-            
-            // 隐藏之前的错误
-            hideError();
             
             // 按钮加载状态
             loginBtn.disabled = true;
@@ -129,9 +149,14 @@
             }
         }
 
-        // 输入框焦点时隐藏错误
+        // 仅当用户开始输入时隐藏错误
         document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', hideError);
+            input.addEventListener('input', function () {
+                const errorDiv = document.getElementById('errorMessage');
+                if (errorDiv && errorDiv.style.display === 'block') {
+                    hideError();
+                }
+            });
         });
     </script>
 </body>

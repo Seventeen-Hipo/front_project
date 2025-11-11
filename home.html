@@ -6,6 +6,9 @@
     <title>动物科普网 - 探索自然生命的奥秘</title>
     <!-- 引入CSS样式文件 -->
     <link rel="stylesheet" href="home_style.css">
+    <style>
+      .nav-list a.active{color:#2563eb;border-bottom:2px solid #2563eb}
+    </style>
 </head>
 <body>
     <!-- 顶部导航栏 -->
@@ -15,17 +18,18 @@
                 <span>动物科普网</span>
             </div>
             <ul class="nav-list" id="navList">
-                <li><a href="#">首页</a></li>
-                <li><a href="#">陆地动物</a></li>
-                <li><a href="#">海洋动物</a></li>
-                <li><a href="#">鸟类世界</a></li>
-                <li><a href="#">珍稀保护</a></li>
-                <li><a href="#">科普资讯</a></li>
-                <li><a href="#">关于我们</a></li>
+                <li><a href="/home">首页</a></li>
+                <li><a href="/land.html">陆地动物</a></li>
+                <li><a href="/ocean.html">海洋动物</a></li>
+                <li><a href="/birds.html">鸟类世界</a></li>
+                <li><a href="/protect.html">珍稀保护</a></li>
+                <li><a href="/news.html">科普资讯</a></li>
+                <li><a href="/about.html">关于我们</a></li>
+                <li><a href="/identify">动物识别</a></li>
             </ul>
-            <div class="nav-actions">
-                <a href="login.html" class="nav-btn login-btn">登录</a>
-                <a href="register.html" class="nav-btn register-btn">注册</a>
+            <div class="nav-actions" id="navActions">
+                <a href="/login" class="nav-btn login-btn">登录</a>
+                <a href="/register" class="nav-btn register-btn">注册</a>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn">
                 ☰
@@ -251,5 +255,41 @@
 
     <!-- 引入JavaScript文件 -->
     <script src="home_interaction.js"></script>
+    <script>
+      // 根据登录状态更新导航栏
+      (async function(){
+        try {
+          const resp = await fetch('/api/me', { credentials: 'include' });
+          if (!resp.ok) return;
+          const data = await resp.json();
+          if (data && data.success && data.user && data.user.username) {
+            const nav = document.getElementById('navActions');
+            if (nav) {
+              nav.innerHTML = '' +
+                '<div class="nav-user-box" style="display:flex;align-items:center;gap:10px;">' +
+                  '<div class="avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3bc9db,#845ef7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">' +
+                    (data.user.username.substring(0,1) || 'U') +
+                  '</div>' +
+                  '<div class="user-info" style="display:flex;flex-direction:column;line-height:1.2;">' +
+                    '<span style="font-weight:600;color:#1f2937;">' + '欢迎，' + data.user.username + '</span>' +
+                    '<span style="font-size:12px;color:#6b7280;">已登录</span>' +
+                  '</div>' +
+                  '<a class="nav-btn" href="/logout" style="margin-left:6px;">退出</a>' +
+                '</div>';
+            }
+          }
+        } catch(e) {
+          // 忽略错误，保持默认登录/注册按钮
+        }
+      })();
+      // 高亮当前导航
+      (function(){
+        var path = location.pathname || '/home';
+        if (path === '/') path = '/home';
+        document.querySelectorAll('.nav-list a').forEach(function(a){
+          if (a.getAttribute('href') === path) a.classList.add('active');
+        });
+      })();
+    </script>
 </body>
 </html>

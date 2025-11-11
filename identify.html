@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动物识别</title>
+  <link rel="stylesheet" href="home_style.css">
+  <style>
+    .identify-wrapper{max-width:900px;margin:40px auto;padding:28px;background:#fff;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,0.10);position:relative;overflow:hidden}
+    .identify-wrapper::before{
+      content:"";position:absolute;inset:-40% -40% auto auto;width:60%;height:60%;
+      background:radial-gradient(120px 120px at 30% 30%, rgba(132,94,247,.18), transparent 60%);
+      filter:blur(18px);pointer-events:none
+    }
+    .animated-banner{
+      position:absolute;left:-10%;right:-10%;top:-28px;height:120px;border-radius:20px;
+      background:linear-gradient(90deg,#c7d2fe 0%, #fbcfe8 50%, #c7d2fe 100%);
+      filter:blur(22px);opacity:.55;animation:banner-flow 10s linear infinite
+    }
+    @keyframes banner-flow{ 0%{transform:translateX(0)} 100%{transform:translateX(10%)} }
+
+    .identify-header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .identify-badge{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#3bc9db,#845ef7);color:#fff;font-size:20px;box-shadow:0 6px 18px rgba(132,94,247,.35)}
+    .identify-title{margin:0;font-size:22px;color:#1f2937}
+    .identify-sub{margin:4px 0 0 0;color:#6b7280;font-size:14px}
+
+    .dropzone{
+      margin-top:12px;border:2px dashed #c7d2fe;border-radius:14px;padding:20px;background:#f8fafc;
+      display:flex;gap:14px;align-items:center;justify-content:center;flex-direction:column;
+      transition:all .2s ease
+    }
+    .dropzone:hover{background:#f1f5f9}
+    .dropzone.dragover{background:#eef2ff;border-color:#818cf8;transform:scale(1.01)}
+    .pick-file{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid #e5e7eb;
+      background:#ffffff;cursor:pointer;transition:all .2s ease}
+    .pick-file:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(99,102,241,.20);border-color:#c7d2fe}
+
+    .identify-actions{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:14px}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:0;cursor:pointer;
+      background:linear-gradient(135deg,#3bc9db 0%, #845ef7 100%);color:#fff;font-weight:600;letter-spacing:.2px;
+      box-shadow:0 10px 24px rgba(132,94,247,.28);transition:transform .15s ease, box-shadow .15s ease}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(132,94,247,.35)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-ripple{position:relative;overflow:hidden}
+    .btn-ripple::after{
+      content:"";position:absolute;inset:auto auto;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;
+      background:rgba(255,255,255,.45);opacity:.8;pointer-events:none
+    }
+
+    .preview{max-width:100%;margin-top:12px;border-radius:12px;display:none;border:1px solid #eef2f7}
+    .progress{height:10px;background:#eef2ff;border-radius:999px;overflow:hidden;margin-top:16px;display:none}
+    .bar{height:100%;width:0;background:linear-gradient(90deg,#3bc9db,#845ef7);
+      animation:bar-stripe 1s linear infinite;background-size:200% 100%}
+    @keyframes bar-stripe { 0%{background-position:0 0} 100%{background-position:200% 0} }
+
+    .result-box{margin-top:18px;padding:16px;border:1px solid #eef2f7;border-radius:14px;background:linear-gradient(180deg,#ffffff,#fafbff);
+      display:none;opacity:0;transform:translateY(6px);transition:opacity .25s ease, transform .25s ease}
+    .result-box.show{display:block;opacity:1;transform:translateY(0)}
+    .result-title{margin:0 0 8px 0;color:#334155;font-size:16px}
+    .result-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#4338ca;font-weight:600}
+    .conf{color:#6b7280;margin-left:8px}
+
+    .pulse{
+      position:absolute;inset:auto 18px 18px auto;width:14px;height:14px;border-radius:50%;
+      background:radial-gradient(#34d399 35%, rgba(52,211,153,.3) 36%, transparent 70%);
+      animation:pulse 1.6s ease-out infinite
+    }
+    @keyframes pulse {
+      0%{transform:scale(.9);opacity:.75}
+      70%{transform:scale(1.15);opacity:.35}
+      100%{transform:scale(.9);opacity:.75}
+    }
+
+    .tips{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .tip{padding:10px 12px;border:1px dashed #e5e7eb;border-radius:10px;background:#fafafa;color:#6b7280;font-size:12px}
+    @media (max-width: 760px){ .tips{grid-template-columns:1fr} }
+
+    .float-emo{position:absolute;opacity:.15;font-size:54px;pointer-events:none;animation:float 8s ease-in-out infinite}
+    .float-emo.e1{left:-6px;top:22%;animation-delay:0s}
+    .float-emo.e2{right:-6px;top:8%;animation-delay:1s}
+    .float-emo.e3{right:10px;bottom:16%;animation-delay:2s}
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo"><span>动物科普网</span></div>
+      <ul class="nav-list" id="navList">
+        <li><a href="/home">首页</a></li>
+        <li><a href="/land.html">陆地动物</a></li>
+        <li><a href="/ocean.html">海洋动物</a></li>
+        <li><a href="/birds.html">鸟类世界</a></li>
+        <li><a href="/protect.html">珍稀保护</a></li>
+        <li><a href="/news.html">科普资讯</a></li>
+        <li><a href="/about.html">关于我们</a></li>
+        <li><a href="/identify">动物识别</a></li>
+      </ul>
+      <div class="nav-actions" id="navActions">
+        <a href="/login" class="nav-btn login-btn">登录</a>
+        <a href="/register" class="nav-btn register-btn">注册</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="identify-wrapper">
+    <div class="animated-banner"></div>
+    <div class="float-emo e1">🦊</div>
+    <div class="float-emo e2">🦜</div>
+    <div class="float-emo e3">🐋</div>
+    <span class="pulse" title="服务就绪"></span>
+    <div class="identify-header">
+      <div class="identify-badge">🧠</div>
+      <div>
+        <h3 class="identify-title">动物识别</h3>
+        <p class="identify-sub">上传或拖拽图片，系统将基于模型进行分类预测</p>
+      </div>
+    </div>
+
+    <div id="dropzone" class="dropzone">
+      <div style="font-weight:600;color:#334155">拖拽图片到此处，或</div>
+      <label class="pick-file">
+        <span>选择图片</span>
+        <input id="fileInput" type="file" accept="image/*" style="display:none">
+      </label>
+      <div style="font-size:12px;color:#6b7280">支持 png / jpg / jpeg / bmp / gif</div>
+    </div>
+
+    <div class="identify-actions">
+      <button id="btnPredict" class="btn-primary btn-ripple">开始识别</button>
+    </div>
+
+    <img id="preview" class="preview" />
+    <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+    <div id="result" class="result-box">
+      <h4 class="result-title">识别结果</h4>
+      <div><span id="pred" class="result-pill">—</span><span id="conf" class="conf"></span></div>
+    </div>
+
+    <div class="tips">
+      <div class="tip">清晰主体更易识别，背景简单更佳</div>
+      <div class="tip">支持常见图片格式：png / jpg / jpeg / bmp / gif</div>
+      <div class="tip">图片尺寸过大时，上传与处理可能更久</div>
+    </div>
+  </div>
+
+  <script>
+    // 若未登录，快速检测并跳登录
+    (async function(){
+      try{
+        const r = await fetch('/api/me', {credentials:'include'});
+        if(!r.ok){ window.location.href='/login?error=请先登录后再访问动物识别功能&next=%2Fidentify'; }
+        const j = await r.json().catch(()=>null);
+        if(!(j && j.success)) window.location.href='/login?error=请先登录后再访问动物识别功能&next=%2Fidentify';
+      }catch(e){
+        window.location.href='/login?error=请先登录后再访问动物识别功能&next=%2Fidentify';
+      }
+    })();
+    // 与主页面一致：根据登录状态更新导航栏
+    (async function(){
+      try {
+        const resp = await fetch('/api/me', { credentials: 'include' });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data && data.success && data.user && data.user.username) {
+          const nav = document.getElementById('navActions');
+          if (nav) {
+            nav.innerHTML = '' +
+              '<div class="nav-user-box" style="display:flex;align-items:center;gap:10px;">' +
+                '<div class="avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3bc9db,#845ef7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">' +
+                  (data.user.username.substring(0,1) || 'U') +
+                '</div>' +
+                '<div class="user-info" style="display:flex;flex-direction:column;line-height:1.2;">' +
+                  '<span style="font-weight:600;color:#1f2937;">' + '欢迎，' + data.user.username + '</span>' +
+                  '<span style="font-size:12px;color:#6b7280;">已登录</span>' +
+                '</div>' +
+                '<a class="nav-btn" href="/logout" style="margin-left:6px;">退出</a>' +
+              '</div>';
+          }
+        }
+      } catch(e) {}
+    })();
+
+    // 根据登录状态更新导航栏（与首页一致）
+    (async function(){
+      try {
+        const resp = await fetch('/api/me', { credentials: 'include' });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data && data.success && data.user && data.user.username) {
+          const nav = document.getElementById('navActions');
+          if (nav) {
+            nav.innerHTML = '' +
+              '<div class="nav-user-box" style="display:flex;align-items:center;gap:10px;">' +
+                '<div class="avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3bc9db,#845ef7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">' +
+                  (data.user.username.substring(0,1) || 'U') +
+                '</div>' +
+                '<div class="user-info" style="display:flex;flex-direction:column;line-height:1.2;">' +
+                  '<span style="font-weight:600;color:#1f2937;">' + '欢迎，' + data.user.username + '</span>' +
+                  '<span style="font-size:12px;color:#6b7280;">已登录</span>' +
+                '</div>' +
+                '<a class="nav-btn" href="/logout" style="margin-left:6px;">退出</a>' +
+              '</div>';
+          }
+        }
+      } catch(e) {}
+    })();
+
+    const fileInput = document.getElementById('fileInput');
+    const btn = document.getElementById('btnPredict');
+    const result = document.getElementById('result');
+    const preview = document.getElementById('preview');
+    const dropzone = document.getElementById('dropzone');
+    const progress = document.getElementById('progress');
+    const bar = document.getElementById('bar');
+    const predEl = document.getElementById('pred');
+    const confEl = document.getElementById('conf');
+    let currentFile = null;
+
+    function setFile(f){
+      if (!f) return;
+      const url = URL.createObjectURL(f);
+      preview.src = url;
+      preview.style.display = 'block';
+      currentFile = f;
+    }
+
+    // ripple effect
+    document.getElementById('btnPredict').addEventListener('click', function(e){
+      const btn = this;
+      const x = e.offsetX, y = e.offsetY;
+      btn.style.setProperty('--rX', x+'px'); btn.style.setProperty('--rY', y+'px');
+      const rip = document.createElement('span');
+      rip.style.position='absolute'; rip.style.left=x+'px'; rip.style.top=y+'px';
+      rip.style.width='0'; rip.style.height='0'; rip.style.borderRadius='50%';
+      rip.style.background='rgba(255,255,255,.45)'; rip.style.transform='translate(-50%,-50%)';
+      rip.style.transition='width .45s ease,height .45s ease,opacity .45s ease';
+      btn.appendChild(rip);
+      requestAnimationFrame(()=>{
+        rip.style.width='300px'; rip.style.height='300px'; rip.style.opacity='0';
+      });
+      setTimeout(()=>rip.remove(), 480);
+    }, {passive:true});
+
+    fileInput.addEventListener('change', () => setFile(fileInput.files[0]));
+
+    // Drag & Drop
+    ;['dragenter','dragover'].forEach(evt=>{
+      dropzone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('dragover'); });
+    });
+    ;['dragleave','drop'].forEach(evt=>{
+      dropzone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('dragover'); });
+    });
+    dropzone.addEventListener('drop', e => {
+      const files = e.dataTransfer.files;
+      if (files && files[0]) setFile(files[0]);
+    });
+
+    btn.addEventListener('click', async () => {
+      const f = currentFile || fileInput.files[0];
+      if (!f) { alert('请先选择图片'); return; }
+      const fd = new FormData(); fd.append('file', f);
+      // reset UI
+      result.classList.remove('show');
+      result.style.display='none';
+      progress.style.display='block';
+      bar.style.width='0%';
+      // fake smooth progress while waiting
+      let w = 0;
+      const progTimer = setInterval(()=>{
+        w = Math.min(w + Math.random()*12+5, 92);
+        bar.style.width = w+'%';
+      }, 220);
+      try{
+        const resp = await fetch('/api/predict', { method:'POST', body: fd });
+        if(!resp.ok){
+          if(resp.status===401){ window.location.href='/login?error=请先登录&next=%2Fidentify'; return; }
+          const err = await resp.json().catch(()=>({detail:'请求失败'}));
+          throw new Error(err.detail || '请求失败');
+        }
+        const data = await resp.json();
+        // finish progress
+        clearInterval(progTimer);
+        bar.style.width='100%';
+        setTimeout(()=>{ progress.style.display='none'; }, 180);
+        // show result with animation
+        predEl.textContent = data.predicted_class;
+        confEl.textContent = '准确率：' + data.confidence + '%';
+        result.style.display='block';
+        requestAnimationFrame(()=>{ result.classList.add('show'); });
+        // celebratory burst
+        burst(result);
+      }catch(e){
+        clearInterval(progTimer);
+        progress.style.display='none';
+        result.style.display='block';
+        result.classList.add('show');
+        predEl.textContent = '识别失败';
+        confEl.textContent = e.message || '';
+      }
+    });
+
+    // simple confetti-like burst
+    function burst(anchor){
+      const n = 14;
+      for(let i=0;i<n;i++){
+        const dot = document.createElement('span');
+        dot.style.position='absolute';
+        dot.style.width='8px'; dot.style.height='8px'; dot.style.borderRadius='50%';
+        dot.style.background = ['#3bc9db','#845ef7','#34d399','#f59e0b','#ef4444'][i%5];
+        dot.style.left = (anchor.offsetLeft + anchor.offsetWidth/2) + 'px';
+        dot.style.top  = (anchor.offsetTop + 10) + 'px';
+        dot.style.pointerEvents='none';
+        dot.style.opacity='0.95';
+        document.body.appendChild(dot);
+        const ang = (Math.PI*2/n)*i;
+        const dist = 40 + Math.random()*40;
+        const dx = Math.cos(ang)*dist;
+        const dy = Math.sin(ang)*dist - 20;
+        dot.animate([
+          { transform:'translate(0,0) scale(1)', opacity:1 },
+          { transform:`translate(${dx}px, ${dy}px) scale(.6)`, opacity:0 }
+        ], { duration: 700, easing:'cubic-bezier(.2,.7,.3,1)', fill:'forwards' }).onfinish = ()=>dot.remove();
+      }
+    }
+    // 高亮当前导航
+    (function(){
+      var path = location.pathname;
+      document.querySelectorAll('.nav-list a').forEach(function(a){
+        if (a.getAttribute('href') === path) a.classList.add('active');
+      });
+    })();
+  </script>
+</body>
+</html>

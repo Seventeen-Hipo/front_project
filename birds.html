@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鸟类世界 - 动物科普网</title>
+  <link rel="stylesheet" href="home_style.css">
+  <style>
+    .nav-list a.active{color:#2563eb;border-bottom:2px solid #2563eb}
+    .hero{padding:60px 20px;background:linear-gradient(135deg,#e9d5ff,#cffafe);text-align:center}
+    .title{margin:0;font-size:28px;color:#111827}
+    .sub{margin:8px 0 0 0;color:#6b7280}
+    .grid{max-width:1100px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 10px 24px rgba(0,0,0,.06);opacity:0;transform:translateY(8px)}
+    .card.reveal{animation:fadeUp .5s ease forwards}
+    .pic{height:180px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:48px}
+    .body{padding:14px}
+    .name{margin:0 0 8px;color:#111827}
+    .desc{margin:0;color:#6b7280;font-size:13px}
+    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+    @media (max-width: 860px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+    @media (max-width: 560px){ .grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo"><span>动物科普网</span></div>
+      <ul class="nav-list" id="navList">
+        <li><a href="/home">首页</a></li>
+        <li><a href="/land.html">陆地动物</a></li>
+        <li><a href="/ocean.html">海洋动物</a></li>
+        <li><a href="/birds.html">鸟类世界</a></li>
+        <li><a href="/protect.html">珍稀保护</a></li>
+        <li><a href="/news.html">科普资讯</a></li>
+        <li><a href="/about.html">关于我们</a></li>
+        <li><a href="/identify">动物识别</a></li>
+      </ul>
+      <div class="nav-actions" id="navActions">
+        <a href="/login" class="nav-btn login-btn">登录</a>
+        <a href="/register" class="nav-btn register-btn">注册</a>
+      </div>
+    </div>
+  </header>
+  <section class="hero">
+    <h1 class="title">鸟类世界</h1>
+    <p class="sub">翅膀、羽毛与鸣唱，感受天空的艺术</p>
+  </section>
+  <section class="grid">
+    <div class="card"><div class="pic">🦜</div><div class="body"><h3 class="name">鹦鹉</h3><p class="desc">聪明健谈，能模仿人类声音。</p></div></div>
+    <div class="card"><div class="pic">🦅</div><div class="body"><h3 class="name">雄鹰</h3><p class="desc">锐利目光与强悍飞行能力的象征。</p></div></div>
+    <div class="card"><div class="pic">🕊️</div><div class="body"><h3 class="name">鸽子</h3><p class="desc">方向感卓越，是人类的老朋友。</p></div></div>
+  </section>
+  <script>
+    const cards=document.querySelectorAll('.card');
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('reveal')})},{threshold:.15});
+    cards.forEach(c=>io.observe(c));
+    // 与主页面一致：根据登录状态更新导航栏
+    (async function(){
+      try {
+        const resp = await fetch('/api/me', { credentials: 'include' });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data && data.success && data.user && data.user.username) {
+          const nav = document.getElementById('navActions');
+          if (nav) {
+            nav.innerHTML = '' +
+              '<div class="nav-user-box" style="display:flex;align-items:center;gap:10px;">' +
+                '<div class="avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3bc9db,#845ef7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;">' +
+                  (data.user.username.substring(0,1) || 'U') +
+                '</div>' +
+                '<div class="user-info" style="display:flex;flex-direction:column;line-height:1.2;">' +
+                  '<span style="font-weight:600;color:#1f2937;">' + '欢迎，' + data.user.username + '</span>' +
+                  '<span style="font-size:12px;color:#6b7280;">已登录</span>' +
+                '</div>' +
+                '<a class="nav-btn" href="/logout" style="margin-left:6px;">退出</a>' +
+              '</div>';
+          }
+        }
+      } catch(e) {}
+    })();
+    // 高亮当前导航
+    (function(){
+      var path = location.pathname;
+      document.querySelectorAll('.nav-list a').forEach(function(a){
+        if (a.getAttribute('href') === path) a.classList.add('active');
+      });
+    })();
+  </script>
+</body>
+</html>
+
