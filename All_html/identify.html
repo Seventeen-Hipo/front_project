@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动物识别</title>
+  <link rel="stylesheet" href="/static/css/home_style.css">
+  <link rel="stylesheet" href="/static/css/identify_style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <div class="logo"><span>动物科普网</span></div>
+      <ul class="nav-list" id="navList">
+        <li><a href="/home">首页</a></li>
+        <li><a href="/land">陆地动物</a></li>
+        <li><a href="/ocean">海洋动物</a></li>
+        <li><a href="/birds">鸟类世界</a></li>
+        <li><a href="/protect">珍稀保护</a></li>
+        <li><a href="/news">科普资讯</a></li>
+        <li><a href="/about">关于我们</a></li>
+        <li><a href="/identify">动物识别</a></li>
+      </ul>
+      <div class="nav-actions" id="navActions">
+        <a href="/login" class="nav-btn login-btn">登录</a>
+        <a href="/register" class="nav-btn register-btn">注册</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="identify-wrapper">
+    <div class="animated-banner"></div>
+    <div class="float-emo e1">🦊</div>
+    <div class="float-emo e2">🦜</div>
+    <div class="float-emo e3">🐋</div>
+    <span class="pulse" title="服务就绪"></span>
+    <div class="identify-header">
+      <div class="identify-badge">🧠</div>
+      <div>
+        <h3 class="identify-title">动物识别</h3>
+        <p class="identify-sub">上传或拖拽图片，系统将基于模型进行分类预测</p>
+      </div>
+    </div>
+
+    <div id="dropzone" class="dropzone">
+      <div class="dropzone-text">拖拽图片到此处，或</div>
+      <label class="pick-file">
+        <span>选择图片</span>
+        <input id="fileInput" type="file" accept="image/*" class="file-input-hidden">
+      </label>
+      <div class="dropzone-format">支持 png / jpg / jpeg / bmp / gif</div>
+    </div>
+
+    <div class="identify-actions">
+      <button id="btnPredict" class="btn-primary btn-ripple">开始识别</button>
+    </div>
+
+    <img id="preview" class="preview" />
+    <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
+    <div id="result" class="result-box">
+      <h4 class="result-title">识别结果</h4>
+      <div class="result-content">
+        <span id="pred" class="result-pill">—</span>
+        <span id="conf" class="conf"></span>
+      </div>
+    </div>
+
+    <div class="tips">
+      <div class="tip">清晰主体更易识别，背景简单更佳</div>
+      <div class="tip">支持常见图片格式：png / jpg / jpeg / bmp / gif</div>
+      <div class="tip">图片尺寸过大时，上传与处理可能更久</div>
+    </div>
+  </div>
+
+  <script src="/static/js/identify_interaction.js"></script>
+  <script src="/static/js/global_nav.js"></script>
+</body>
+</html>

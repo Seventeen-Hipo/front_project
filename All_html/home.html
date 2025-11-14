@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动物科普网 - 探索自然生命的奥秘</title>
+    <!-- 引入CSS样式文件 -->
+    <link rel="stylesheet" href="/static/css/home_style.css">
+    <style>
+      .nav-list a.active{color:#2563eb;border-bottom:2px solid #2563eb}
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <span>动物科普网</span>
+            </div>
+            <ul class="nav-list" id="navList">
+                <li><a href="/home">首页</a></li>
+                <li><a href="/land">陆地动物</a></li>
+                <li><a href="/ocean">海洋动物</a></li>
+                <li><a href="/birds">鸟类世界</a></li>
+                <li><a href="/protect">珍稀保护</a></li>
+                <li><a href="/news">科普资讯</a></li>
+                <li><a href="/about">关于我们</a></li>
+                <li><a href="/identify">动物识别</a></li>
+            </ul>
+            <div class="nav-actions" id="navActions">
+                <a href="/login" class="nav-btn login-btn">登录</a>
+                <a href="/register" class="nav-btn register-btn">注册</a>
+            </div>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                ☰
+            </div>
+        </div>
+    </header>
+    <div class="slider-container">
+    <!-- 轮播图容器 -->
+    <div class="slider-wrapper">
+        <div class="slider-item" style="background: url(/picture/p1.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p2.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p3.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p4.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p5.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p6.jpg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p7.jpeg) center/cover no-repeat;"></div>
+        <div class="slider-item" style="background: url(/picture/p8.jpeg) center/cover no-repeat;"></div>
+    </div>
+    <!-- 分页器 -->
+    <div class="pagination"></div>
+    <!-- 左右导航按钮 -->
+    <button class="prev-btn">&lt;</button>
+    <button class="next-btn">&gt;</button>
+    </div>
+
+    <!-- 全屏主题专栏 -->
+    <!-- 动物新闻专栏 -->
+    <section class="fullscreen-section news-section" data-section="news">
+        <div class="section-inner">
+            <div class="news-header">
+                <div class="news-header-icon">📰</div>
+                <h2 class="section-title">动物新闻</h2>
+                <p class="news-subtitle">探索自然世界的最新动态与科普资讯</p>
+            </div>
+            <div class="news-container">
+                <!-- 头条新闻 -->
+                <div class="news-featured-wrapper">
+                    <a class="news-card featured" href="https://news.qq.com/rain/a/20251031V02YBG00">
+                        <div class="news-card-badge">🔥 头条推荐</div>
+                        <div class="news-card-content">
+                            <div class="news-card-header">
+                                <span class="tag tag-hot">热点</span>
+                                <span class="news-date">2025-10-31</span>
+                            </div>
+                            <h3 class="news-title">深山走红动物园喊网友别打钱了"有能力把动物照顾好"</h3>
+                            <p class="news-excerpt">一家位于深山中的动物园因游客稀少而走红网络，园方呼吁网友不要再捐款，表示有能力照顾好动物，展现了动物园的专业运营能力和对动物的关爱之情。</p>
+                            <div class="news-footer">
+                                <span class="read-more-link">阅读全文</span>
+                                <span class="read-arrow">→</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- 新闻网格 -->
+                <div class="news-grid">
+                    <a class="news-card" href="https://news.qq.com/rain/a/20251030V02E7B00">
+                        <div class="news-card-header">
+                            <span class="tag tag-hot">热点</span>
+                            <span class="news-date">2025-10-31</span>
+                        </div>
+                        <h3 class="news-title">一言不合就开打！大自然攻击性最强的动物之一</h3>
+                        <p class="news-excerpt">探索那些在野外具有强烈攻击性的动物，了解它们为何如此凶猛，以及在面对威胁时的防御策略。</p>
+                        <div class="news-footer">
+                            <span class="read-more-link">阅读全文 →</span>
+                        </div>
+                    </a>
+                    <a class="news-card" href="https://news.qq.com/rain/a/20251031A036FD00">
+                        <div class="news-card-header">
+                            <span class="tag tag-eco">生态</span>
+                            <span class="news-date">2025-10-31</span>
+                        </div>
+                        <h3 class="news-title">长江保护连续五年"优秀"！咸宁生态再传捷报</h3>
+                        <p class="news-excerpt">咸宁在长江保护工作中再次获得优秀评价，展现了生态保护的卓越成果和对环境可持续发展的贡献。</p>
+                        <div class="news-footer">
+                            <span class="read-more-link">阅读全文 →</span>
+                        </div>
+                    </a>
+                    <a class="news-card" href="https://news.qq.com/rain/a/20251030A05B3A00">
+                        <div class="news-card-header">
+                            <span class="tag tag-science">科普</span>
+                            <span class="news-date">2025-10-31</span>
+                        </div>
+                        <h3 class="news-title">《自然》：护好DNA，长寿无癌的关键！</h3>
+                        <p class="news-excerpt">最新研究发现，DNA保护机制可能是长寿和抗癌的关键因素，为人类健康研究提供了新的方向。</p>
+                        <div class="news-footer">
+                            <span class="read-more-link">阅读全文 →</span>
+                        </div>
+                    </a>
+                    <a class="news-card" href="https://news.qq.com/rain/a/20251031A01F8O00">
+                        <div class="news-card-header">
+                            <span class="tag tag-science">科普</span>
+                            <span class="news-date">2025-10-31</span>
+                        </div>
+                        <h3 class="news-title">猪体重那么大，为什么游泳不下沉？</h3>
+                        <p class="news-excerpt">揭秘猪类游泳的秘密，为什么它们能在水中保持浮力，探索动物身体结构与生存技能的有趣联系。</p>
+                        <div class="news-footer">
+                            <span class="read-more-link">阅读全文 →</span>
+                        </div>
+                    </a>
+                    <a class="news-card" href="#">
+                        <div class="news-card-header">
+                            <span class="tag tag-protect">保护</span>
+                            <span class="news-date">2025-10-30</span>
+                        </div>
+                        <h3 class="news-title">国家公园成功救助金雕幼鸟并回归自然</h3>
+                        <p class="news-excerpt">工作人员精心照料受伤的金雕幼鸟，最终成功将其放归自然，展现了野生动物保护工作的重要价值。</p>
+                        <div class="news-footer">
+                            <span class="read-more-link">阅读全文 →</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 科普分类 -->
+    <section class="fullscreen-section category-section" data-section="category">
+        <div class="section-inner">
+            <h2 class="section-title">科普分类</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon">🦁</div>
+                    <h3 class="category-name">陆地哺乳动物</h3>
+                    <p class="category-desc">探索狮子、老虎、大象等陆地哺乳动物的生活习性与生存智慧</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🐠</div>
+                    <h3 class="category-name">海洋生物</h3>
+                    <p class="category-desc">揭秘鲸鱼、鲨鱼、珊瑚等海洋生物的神秘世界与生态环境</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🦅</div>
+                    <h3 class="category-name">鸟类王国</h3>
+                    <p class="category-desc">了解雄鹰、孔雀、企鹅等鸟类的飞行能力与繁殖特点</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🐢</div>
+                    <h3 class="category-name">爬行动物</h3>
+                    <p class="category-desc">认识鳄鱼、蛇、乌龟等爬行动物的独特生理结构与生存方式</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 热门动物介绍 -->
+    <section class="fullscreen-section animal-section" data-section="animal">
+        <div class="section-inner">
+            <h2 class="section-title">热门动物科普</h2>
+            <div class="animal-list">
+                <div class="animal-card">
+                    <img src="/static/images/dog.webp" alt="狗狗" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">犬类：人类最忠实的朋友</h3>
+                        <p class="animal-desc">犬类是最早被人类驯化的动物之一，距今已有上万年历史。它们具有敏锐的嗅觉和听觉，能通过肢体语言表达情绪，目前全球已培育出超过300个不同品种。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+                <div class="animal-card">
+                    <img src="/static/images/lu.jpg" alt="梅花鹿" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">梅花鹿：森林中的精灵</h3>
+                        <p class="animal-desc">梅花鹿是中国国家二级保护动物，夏季毛色呈栗红色并带有白色斑点，冬季则变为烟褐色。它们主要以植物为食，擅长奔跑，听觉和嗅觉十分灵敏。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+                <div class="animal-card">
+                    <img src="/static/images/yinwu.jpg" alt="鹦鹉" class="animal-img">
+                    <div class="animal-info">
+                        <h3 class="animal-name">鹦鹉：会说话的鸟类智者</h3>
+                        <p class="animal-desc">鹦鹉拥有独特的鸣管结构，能模仿人类语言和其他声音。它们主要分布在热带和亚热带地区，以果实、种子和花蜜为食，部分品种寿命可达80年以上。</p>
+                        <a href="#" class="read-more">查看更多 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>快速导航</h3>
+                <ul>
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">陆地动物</a></li>
+                    <li><a href="#">海洋动物</a></li>
+                    <li><a href="#">鸟类世界</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>资源中心</h3>
+                <ul>
+                    <li><a href="#">科普视频</a></li>
+                    <li><a href="#">动物图鉴</a></li>
+                    <li><a href="#">保护项目</a></li>
+                    <li><a href="#">教育资料</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>联系我们</h3>
+                <ul>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">合作洽谈</a></li>
+                    <li><a href="#">意见反馈</a></li>
+                    <li><a href="#">加入我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>关注我们</h3>
+                <ul>
+                    <li><a href="#">微信公众号</a></li>
+                    <li><a href="#">微博</a></li>
+                    <li><a href="#">抖音</a></li>
+                    <li><a href="#">B站</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 动物科普网 版权所有 | 京ICP备12345678号
+        </div>
+    </footer>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="/static/js/home_interaction.js"></script>
+    <script src="/static/js/global_nav.js"></script>
+</body>
+</html>

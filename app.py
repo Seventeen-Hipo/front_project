@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.responses import Response
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import pymysql
@@ -12,6 +11,9 @@ import io
 
 # 初始化FastAPI应用
 app = FastAPI(title="动物科普网")
+app.mount("/static/css", StaticFiles(directory="All_css"), name="static_css")
+app.mount("/static/js", StaticFiles(directory="All_js"), name="static_js")
+app.mount("/static/images", StaticFiles(directory="picture"), name="static_images")
 # --------------------------
 # ML 模型初始化（懒加载，避免导入失败导致 ASGI 无法启动）
 # --------------------------
@@ -73,9 +75,6 @@ app.add_middleware(
 # 配置静态文件（CSS, JS, 图片等）
 from fastapi.responses import FileResponse
 
-# 模板目录（已不使用模板，保留占位）
-templates = None
-
 def get_current_user(request: Request):
     username = request.cookies.get("session_user")
     user_id = request.cookies.get("session_user_id")
@@ -83,17 +82,21 @@ def get_current_user(request: Request):
         return {"id": user_id, "username": username}
     return None
 
-# --------------------------
+def render_html(filename: str) -> HTMLResponse:
+    file_path = os.path.join("All_html", filename)
+    with open(file_path, "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+
 # MySQL数据库连接配置
-# --------------------------
 def get_db_connection():
     """获取MySQL数据库连接"""
     try:
         conn = pymysql.connect(
-            host="localhost",    # 本地数据库地址
-            user="root",         # 用户名
-            password="123456",  # 替换为你的MySQL实际密码
-            database="user_system",  # 数据库名
+            host="localhost",
+            user="root",
+            password="123456",
+            database="user_system",
             charset="utf8mb4",
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -102,17 +105,11 @@ def get_db_connection():
         print(f"数据库连接错误: {e}")
         raise
 
-# --------------------------
+
 # 工具函数
-# --------------------------
 def hash_password(password: str) -> str:
     """密码加密（SHA256）"""
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
-
-def validate_email(email: str) -> bool:
-    """验证邮箱格式"""
-    pattern = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$'
-    return bool(re.match(pattern, email))
 
 def validate_username(username: str) -> bool:
     """验证用户名格式（3-15位字母数字）"""
@@ -128,22 +125,40 @@ def validate_password(password: str) -> bool:
 # --------------------------
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    with open("home.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+    return render_html("home.html")
 
 @app.get("/home", response_class=HTMLResponse)
 async def home():
-    with open("home.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+    return render_html("home.html")
+
+@app.get("/land", response_class=HTMLResponse)
+async def land():
+    return render_html("land.html")
+
+@app.get("/ocean", response_class=HTMLResponse)
+async def ocean():
+    return render_html("ocean.html")
+
+@app.get("/birds", response_class=HTMLResponse)
+async def birds():
+    return render_html("birds.html")
+
+@app.get("/protect", response_class=HTMLResponse)
+async def protect():
+    return render_html("protect.html")
+
+@app.get("/news", response_class=HTMLResponse)
+async def news():
+    return render_html("news.html")
+
+@app.get("/about", response_class=HTMLResponse)
+async def about():
+    return render_html("about.html")
 
 @app.get("/login", response_class=HTMLResponse)
 async def show_login(error: str = None, success: str = None, next: str = None):
-    with open("login.html", "r", encoding="utf-8") as f:
+    with open("All_html/login.html", "r", encoding="utf-8") as f:
         content = f.read()
-        if error:
-            content = content.replace('id="errorMessage"', 'id="errorMessage" style="display: block;"').replace('{{error}}', error)
-        if success:
-            content = content.replace('id="errorMessage"', 'id="errorMessage" style="display: block;"').replace('{{success}}', success)
         if next:
             # 在表单中注入隐藏域（若页面无隐藏域，则简单附加提示）
             content = content.replace('</form>', f'\n<input type="hidden" name="next" value="{next}">\n</form>')
@@ -151,12 +166,8 @@ async def show_login(error: str = None, success: str = None, next: str = None):
 
 @app.get("/register", response_class=HTMLResponse)
 async def show_register(error: str = None, success: str = None):
-    with open("register.html", "r", encoding="utf-8") as f:
+    with open("All_html/register.html", "r", encoding="utf-8") as f:
         content = f.read()
-        if error:
-            content = content.replace('id="errorMessage"', 'id="errorMessage" style="display: block;"').replace('{{error}}', error)
-        if success:
-            content = content.replace('id="errorMessage"', 'id="errorMessage" style="display: block;"').replace('{{success}}', success)
         return HTMLResponse(content=content)
 
 # --------------------------
@@ -174,9 +185,7 @@ async def identify_page(request: Request):
     user = get_current_user(request)
     if not user:
         return RedirectResponse(url="/login?error=请先登录后再访问动物识别功能&next=%2Fidentify", status_code=303)
-    # 返回独立页面文件
-    with open("identify.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+    return render_html("identify.html")
 
 # --------------------------
 # 预测接口（需登录）

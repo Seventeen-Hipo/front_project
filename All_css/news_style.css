@@ -1,0 +1,156 @@
+/* 导航高亮样式 */
+.nav-list a.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+/* 头部英雄区样式 */
+.hero {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #fee2e2, #e0e7ff);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: heroFade 0.8s ease-out both;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -28% -18% auto -18%;
+  height: 150px;
+  background: radial-gradient(110px 110px at 50% 40%, rgba(251,113,133,0.25), transparent 70%);
+  animation: heroPulse 8.5s ease-in-out infinite;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  color: #111827;
+}
+
+.sub {
+  margin: 8px 0 0 0;
+  color: #6b7280;
+}
+
+/* 资讯列表容器 */
+.list {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  gap: 14px;
+}
+
+/* 资讯项样式 */
+.row {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(8px);
+  opacity: 0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+  transition: all 0.3s ease;
+}
+
+/* 资讯项hover效果（新增优化） */
+.row:hover {
+  box-shadow: 0 12px 28px rgba(99, 102, 241, .12);
+  transform: translateY(6px);
+}
+
+/* 滚动渐入动画 */
+.row.reveal {
+  animation: fadeUp .45s ease forwards;
+}
+
+/* 资讯链接样式 */
+.row a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.row a:hover {
+  background-color: #eef2ff;
+}
+
+/* 资讯标签样式 */
+.tag {
+  font-size: 12px;
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 4px 8px;
+  border-radius: 999px;
+  margin-right: 8px;
+}
+
+/* 渐入动画定义 */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroPulse {
+  0%,100% { transform: translateY(0) scale(1); opacity: .55; }
+  50% { transform: translateY(-10px) scale(1.07); opacity: .85; }
+}
+
+/* 用户信息区域样式（与全局保持一致） */
+.nav-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3bc9db, #845ef7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-info span:first-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-info span:last-child {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.nav-user-box .nav-btn {
+  margin-left: 6px;
+}

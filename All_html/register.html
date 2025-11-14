@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户注册 - 动物科普网</title>
+  <link rel="stylesheet" href="/static/css/register_style.css">
+</head>
+<body>
+  <div class="register-wrapper">
+    <a href="/home" class="back-home">← 返回首页</a>
+    <div class="form-container">
+      <div class="register-header">
+        <div class="register-icon">📝</div>
+        <h2>创建账号</h2>
+        <p class="register-subtitle">加入我们，探索更多动物故事</p>
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        <p id="errorText"></p>
+      </div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" name="username" placeholder="3-15位字母或数字" required>
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" name="password" placeholder="6-20位字符" required>
+        </div>
+        <button type="submit" class="register-btn">注册</button>
+        <div class="login-link">
+          已有账号？<a href="/login">立即登录</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/register_interaction.js"></script>
+</body>
+</html>

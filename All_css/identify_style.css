@@ -1,0 +1,368 @@
+/* 容器主体样式 */
+.nav-list a.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+.identify-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 28px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景动画条 */
+.animated-banner {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -28px;
+  height: 120px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #c7d2fe 0%, #fbcfe8 50%, #c7d2fe 100%);
+  filter: blur(22px);
+  opacity: .55;
+  animation: banner-flow 10s linear infinite;
+}
+
+@keyframes banner-flow {
+  0% { transform: translateX(0) }
+  100% { transform: translateX(10%) }
+}
+
+/* 浮动表情装饰 */
+.float-emo {
+  position: absolute;
+  opacity: .15;
+  font-size: 54px;
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+.float-emo.e1 {
+  left: -6px;
+  top: 22%;
+  animation-delay: 0s;
+}
+
+.float-emo.e2 {
+  right: -6px;
+  top: 8%;
+  animation-delay: 1s;
+}
+
+.float-emo.e3 {
+  right: 10px;
+  bottom: 16%;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) }
+  50% { transform: translateY(-10px) }
+}
+
+/* 就绪状态脉冲点 */
+.pulse {
+  position: absolute;
+  inset: auto 18px 18px auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(#34d399 35%, rgba(52,211,153,.3) 36%, transparent 70%);
+  animation: pulse 1.6s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(.9); opacity: .75 }
+  70% { transform: scale(1.15); opacity: .35 }
+  100% { transform: scale(.9); opacity: .75 }
+}
+
+/* 头部标题区域 */
+.identify-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.identify-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3bc9db, #845ef7);
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 0 6px 18px rgba(132, 94, 247, .35);
+}
+
+.identify-title {
+  margin: 0;
+  font-size: 22px;
+  color: #1f2937;
+}
+
+.identify-sub {
+  margin: 4px 0 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* 拖拽上传区域 */
+.dropzone {
+  margin-top: 12px;
+  border: 2px dashed #c7d2fe;
+  border-radius: 14px;
+  padding: 20px;
+  background: #f8fafc;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: all .2s ease;
+}
+
+.dropzone:hover {
+  background: #f1f5f9;
+}
+
+.dropzone.dragover {
+  background: #eef2ff;
+  border-color: #818cf8;
+  transform: scale(1.01);
+}
+
+.dropzone-text {
+  font-weight: 600;
+  color: #334155;
+}
+
+.dropzone-format {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 文件选择按钮 */
+.pick-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.pick-file:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, .20);
+  border-color: #c7d2fe;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+/* 操作按钮区域 */
+.identify-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3bc9db 0%, #845ef7 100%);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 24px rgba(132, 94, 247, .28);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(132, 94, 247, .35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: "";
+  position: absolute;
+  inset: auto auto;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .45);
+  opacity: .8;
+  pointer-events: none;
+}
+
+/* 图片预览区域 */
+.preview {
+  max-width: 100%;
+  margin-top: 12px;
+  border-radius: 12px;
+  display: none;
+  border: 1px solid #eef2f7;
+}
+
+/* 进度条样式 */
+.progress {
+  height: 10px;
+  background: #eef2ff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 16px;
+  display: none;
+}
+
+.bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #3bc9db, #845ef7);
+  animation: bar-stripe 1s linear infinite;
+  background-size: 200% 100%;
+}
+
+@keyframes bar-stripe {
+  0% { background-position: 0 0 }
+  100% { background-position: 200% 0 }
+}
+
+/* 识别结果区域 */
+.result-box {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #eef2f7;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff, #fafbff);
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.result-box.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.result-title {
+  margin: 0 0 8px 0;
+  color: #334155;
+  font-size: 16px;
+}
+
+.result-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 600;
+}
+
+.conf {
+  color: #6b7280;
+}
+
+/* 提示信息区域 */
+.tips {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tip {
+  padding: 10px 12px;
+  border: 1px dashed #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* 响应式布局 */
+@media (max-width: 760px) {
+  .tips {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 用户信息区域样式（与全局保持一致） */
+.nav-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3bc9db, #845ef7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-info span:first-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-info span:last-child {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.nav-user-box .nav-btn {
+  margin-left: 6px;
+}

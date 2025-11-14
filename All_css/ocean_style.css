@@ -1,0 +1,194 @@
+/* 导航高亮样式 */
+.nav-list a.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+/* 头部英雄区样式 */
+.hero {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: heroFade 0.8s ease-out both;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -35% -25% auto -25%;
+  height: 180px;
+  background: radial-gradient(120px 120px at 50% 40%, rgba(59,201,219,.28), transparent 65%);
+  animation: heroWave 9s ease-in-out infinite;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.sub {
+  margin: 8px 0 0 0;
+  color: #64748b;
+}
+
+/* 波浪装饰效果 */
+.wave {
+  position: relative;
+  height: 80px;
+  overflow: hidden;
+}
+
+.wave::before,
+.wave::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -40px -20%;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 40%, rgba(59, 201, 219, .25), transparent 60%);
+  animation: float 10s ease-in-out infinite;
+}
+
+.wave::after {
+  animation-delay: 1.2s;
+  opacity: .6;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) }
+  50% { transform: translateY(-12px) }
+}
+
+/* 海洋动物卡片网格布局 */
+.grid {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* 卡片基础样式 */
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .06);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: transform .3s ease, box-shadow .3s ease;
+  overflow: hidden;
+}
+
+/* 卡片hover效果优化 */
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(59, 130, 246, .15);
+}
+
+/* 卡片渐入动画 */
+.card.reveal {
+  animation: fadeUp .5s ease forwards;
+}
+
+/* 卡片图片区域 */
+.thumb {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 卡片内容区域 */
+.body {
+  padding: 12px 14px;
+}
+
+.name {
+  margin: 0 0 8px;
+  color: #0f172a;
+}
+
+.desc {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 渐入动画定义 */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroWave {
+  0%,100% { transform: translateY(0) scale(1); opacity: .55; }
+  50% { transform: translateY(-10px) scale(1.08); opacity: .85; }
+}
+
+/* 响应式布局适配 */
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 用户信息区域样式（与全局保持一致） */
+.nav-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3bc9db, #845ef7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-info span:first-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-info span:last-child {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.nav-user-box .nav-btn {
+  margin-left: 6px;
+}

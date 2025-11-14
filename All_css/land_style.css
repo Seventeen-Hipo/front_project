@@ -1,0 +1,173 @@
+/* 导航高亮样式 */
+.nav-list a.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+/* 页面头部英雄区 */
+.page-hero {
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: heroFade 0.8s ease-out both;
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20% auto -20%;
+  height: 160px;
+  background: radial-gradient(120px 120px at 40% 40%, rgba(244,114,182,0.25), transparent 65%);
+  animation: heroPulse 8s ease-in-out infinite;
+}
+
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  color: #1f2937;
+}
+
+.page-sub {
+  margin: 8px 0 0 0;
+  color: #6b7280;
+}
+
+/* 陆地动物卡片网格布局 */
+.grid {
+  max-width: 1100px;
+  margin: 24px auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0 16px;
+}
+
+/* 卡片基础样式 */
+.card {
+  background: #fff;
+  border: 1px solid #eef2f7;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .06);
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+/* 卡片滚动渐入动画 */
+.card.reveal {
+  animation: fadeUp .5s ease forwards;
+}
+
+/* 卡片图片样式 */
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* 卡片内容区域 */
+.card-body {
+  padding: 12px 14px;
+}
+
+.card-title {
+  margin: 0 0 8px 0;
+  color: #111827;
+  font-size: 16px;
+}
+
+.card-desc {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 卡片hover效果 */
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px rgba(99, 102, 241, .15);
+}
+
+/* 渐入动画定义 */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroPulse {
+  0%,100% { transform: translateY(0) scale(1); opacity: 0.55; }
+  50% { transform: translateY(-12px) scale(1.08); opacity: 0.9; }
+}
+
+/* 响应式布局适配 */
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 用户信息区域样式（与全局保持一致） */
+.nav-user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3bc9db, #845ef7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-info span:first-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.user-info span:last-child {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.nav-user-box .nav-btn {
+  margin-left: 6px;
+}
